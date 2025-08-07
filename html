@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c; /* Dark slate background */
+            color: #e2e8f0; /* Light gray text */
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        .admin-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            background-color: #dc2626; /* Red-600 */
+            color: white;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .admin-btn:hover {
+            background-color: #b91c1c; /* Red-700 */
+        }
+        .back-to-start-kiosk-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            background-color: #4a5568; /* Gray-700 */
+            color: white;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.2s ease-in-out;
+            z-index: 10; /* Ensure it's above other elements if needed */
+        }
+        .back-to-start-kiosk-btn:hover {
+            background-color: #2d3748; /* Gray-800 */
+        }
+        /* Admin Dashboard Column Styling */
+        .admin-column {
+            background-color: #2d3748;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .admin-column h3 {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #cbd5e0;
+            border-bottom: 1px solid #4a5568;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .admin-order-card {
+            background-color: #4a5568;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .admin-order-card .order-items-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #a0aec0;
+        }
+        .admin-order-card .order-items-list li {
+            margin-bottom: 0.25rem;
+        }
+        .admin-order-card .status-buttons button {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+            border-radius: 0.375rem;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .admin-order-card .status-buttons .btn-in-progress {
+            background-color: #f6ad55; /* Orange */
+            color: #2d3748;
+        }
+        .admin-order-card .status-buttons .btn-in-progress:hover {
+            background-color: #ed8936;
+        }
+        .admin-order-card .status-buttons .btn-completed {
+            background-color: #48bb78; /* Green */
+            color: #2d3748;
+        }
+        .admin-order-card .status-buttons .btn-completed:hover {
+            background-color: #38a169;
+        }
+        .admin-order-card .status-buttons .btn-revert {
+            background-color: #a0aec0; /* Gray */
+            color: #2d3748;
+        }
+        .admin-order-card .status-buttons .btn-revert:hover {
+            background-color: #718096;
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 100; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #2d3748;
+            margin: auto;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+
+    <div id="admin-panel-page" class="flex-1 flex flex-col p-4 min-h-screen">
+        <div class="container bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-4xl mx-auto">
+            <a href="URL_OF_CUSTOMER_KIOSK" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors mb-6 inline-block">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Kiosk
+            </a>
+            <h1 class="text-4xl font-extrabold text-purple-400 mb-6 text-center">Admin Dashboard</h1>
+            
+            <!-- Admin Login -->
+            <div id="admin-login-section" class="text-center mb-8">
+                <p class="text-gray-300 text-lg mb-4">Enter PIN to access the Admin Dashboard:</p>
+                <input type="password" id="admin-pin-input" class="w-full max-w-xs p-3 rounded-lg bg-gray-700 border border-gray-600 text-white text-center focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4" placeholder="15-digit PIN">
+                <button id="admin-login-submit-btn" class="px-6 py-3 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-colors">
+                    Login
+                </button>
+                <p id="admin-login-message" class="text-red-400 mt-4 hidden">Incorrect PIN. Please try again.</p>
+            </div>
+
+            <!-- Admin Dashboard Content (Hidden until logged in) -->
+            <div id="admin-dashboard-content" class="hidden">
+                <h2 class="text-3xl font-bold text-green-400 mb-4">Order Status Overview</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- New Orders Column -->
+                    <div class="admin-column">
+                        <h3>New Orders</h3>
+                        <div id="new-orders-list-admin" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                            <p class="text-gray-500 text-center text-sm" id="no-new-orders">No new orders.</p>
+                        </div>
+                    </div>
+                    <!-- In Progress Column -->
+                    <div class="admin-column">
+                        <h3>In Progress</h3>
+                        <div id="in-progress-orders-list-admin" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                            <p class="text-gray-500 text-center text-sm" id="no-in-progress-orders">No orders in progress.</p>
+                        </div>
+                    </div>
+                    <!-- Completed Orders Column -->
+                    <div class="admin-column">
+                        <h3>Completed Orders</h3>
+                        <div id="completed-orders-list-admin" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                            <p class="text-gray-500 text-center text-sm" id="no-completed-orders">No completed orders.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between gap-4 mt-6">
+                    <button id="clear-orders-btn" class="w-full sm:w-1/2 py-3 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-700 transition-colors">
+                        <i class="fas fa-trash-alt mr-2"></i> Clear All Orders
+                    </button>
+                    <button id="save-completed-orders-btn" class="w-full sm:w-1/2 py-3 bg-blue-400 text-white font-bold rounded-lg shadow-md hover:bg-blue-500 transition-colors">
+                        <i class="fas fa-save mr-2"></i> Save Completed Orders To Clipboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="confirmation-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold text-red-400 mb-4 text-center">Confirm Action</h3>
+            <p id="confirmation-message" class="text-gray-300 text-lg mb-6 text-center">Are you sure you want to clear all orders? This action cannot be undone.</p>
+            <div class="flex justify-center space-x-4">
+                <button id="confirm-yes-btn" class="px-6 py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors">Yes, Clear All</button>
+                <button id="confirm-no-btn" class="px-6 py-3 bg-gray-600 text-white font-bold rounded-lg hover:bg-gray-700 transition-colors">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const adminPinInput = document.getElementById('admin-pin-input');
+            const adminLoginSubmitBtn = document.getElementById('admin-login-submit-btn');
+            const adminLoginMessage = document.getElementById('admin-login-message');
+            const adminDashboardContent = document.getElementById('admin-dashboard-content');
+            
+            const newOrdersListAdmin = document.getElementById('new-orders-list-admin');
+            const inProgressOrdersListAdmin = document.getElementById('in-progress-orders-list-admin');
+            const completedOrdersListAdmin = document.getElementById('completed-orders-list-admin');
+            const noNewOrdersMessage = document.getElementById('no-new-orders');
+            const noInProgressOrdersMessage = document.getElementById('no-in-progress-orders');
+            const noCompletedOrdersMessage = document.getElementById('no-completed-orders');
+
+            const clearOrdersBtn = document.getElementById('clear-orders-btn');
+            const saveCompletedOrdersBtn = document.getElementById('save-completed-orders-btn');
+            
+            const confirmationModal = document.getElementById('confirmation-modal');
+            const confirmYesBtn = document.getElementById('confirm-yes-btn');
+            const confirmNoBtn = document.getElementById('confirm-no-btn');
+            
+            // --- State Variables ---
+            const ADMIN_PIN = 'memphisfoodhead'; // The 15-digit password
+
+            // --- Admin Panel Functions ---
+
+            // Load orders from localStorage
+            const loadOrders = () => {
+                const orders = JSON.parse(localStorage.getItem('foodKioskOrders')) || [];
+                return orders;
+            };
+
+            // Update an order's status and save
+            const updateOrderStatus = (orderId, newStatus) => {
+                const orders = loadOrders();
+                const orderIndex = orders.findIndex(order => order.id === orderId);
+                if (orderIndex !== -1) {
+                    orders[orderIndex].status = newStatus;
+                    localStorage.setItem('foodKioskOrders', JSON.stringify(orders));
+                    renderAdminOrders(); // Re-render to reflect changes
+                }
+            };
+            
+            // Render orders in the admin panel columns
+            const renderAdminOrders = () => {
+                const orders = loadOrders();
+                newOrdersListAdmin.innerHTML = '';
+                inProgressOrdersListAdmin.innerHTML = '';
+                completedOrdersListAdmin.innerHTML = '';
+
+                let hasNewOrders = false;
+                let hasInProgressOrders = false;
+                let hasCompletedOrders = false;
+
+                orders.forEach(order => {
+                    const orderDiv = document.createElement('div');
+                    orderDiv.className = 'admin-order-card';
+                    orderDiv.innerHTML = `
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-gray-400 text-sm">Order ID:</span>
+                            <span class="text-sm font-mono text-indigo-300 break-all">${order.id}</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-gray-400 text-sm">Total:</span>
+                            <span class="text-green-400 font-bold">$${order.total.toFixed(2)}</span>
+                        </div>
+                        <div class="text-xs text-gray-500 mb-2">
+                            <span>Date: ${order.timestamp}</span>
+                        </div>
+                        <div class="mt-2">
+                            <p class="text-gray-400 text-sm">Items:</p>
+                            <ul class="order-items-list">
+                                ${order.items.map(item => `<li>${item.name} x ${item.quantity} ($${item.price.toFixed(2)} each)</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="status-buttons mt-4 flex flex-wrap gap-2">
+                            ${order.status === 'new' ? 
+                                `<button data-order-id="${order.id}" data-new-status="in-progress" class="btn-in-progress">
+                                    <i class="fas fa-hourglass-half mr-1"></i> Start Prep
+                                </button>` : ''}
+                            ${order.status === 'in-progress' ? 
+                                `<button data-order-id="${order.id}" data-new-status="completed" class="btn-completed">
+                                    <i class="fas fa-check-circle mr-1"></i> Mark Done
+                                </button>
+                                <button data-order-id="${order.id}" data-new-status="new" class="btn-revert">
+                                    <i class="fas fa-undo mr-1"></i> Revert
+                                </button>` : ''}
+                            ${order.status === 'completed' ? 
+                                `<button data-order-id="${order.id}" data-new-status="in-progress" class="btn-revert">
+                                    <i class="fas fa-undo mr-1"></i> Revert
+                                </button>` : ''}
+                        </div>
+                    `;
+
+                    if (order.status === 'new') {
+                        newOrdersListAdmin.appendChild(orderDiv);
+                        hasNewOrders = true;
+                    } else if (order.status === 'in-progress') {
+                        inProgressOrdersListAdmin.appendChild(orderDiv);
+                        hasInProgressOrders = true;
+                    } else if (order.status === 'completed') {
+                        completedOrdersListAdmin.appendChild(orderDiv);
+                        hasCompletedOrders = true;
+                    }
+                });
+
+                // Display/hide "No orders" messages
+                noNewOrdersMessage.style.display = hasNewOrders ? 'none' : 'block';
+                noInProgressOrdersMessage.style.display = hasInProgressOrders ? 'none' : 'block';
+                noCompletedOrdersMessage.style.display = hasCompletedOrders ? 'none' : 'block';
+
+                // Attach event listeners for status change buttons
+                document.querySelectorAll('.status-buttons button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const orderId = e.currentTarget.dataset.orderId;
+                        const newStatus = e.currentTarget.dataset.newStatus;
+                        updateOrderStatus(orderId, newStatus);
+                    });
+                });
+            };
+
+            // Clear all orders from localStorage (now uses custom confirmation)
+            const clearAllOrders = () => {
+                confirmationModal.style.display = 'flex'; // Show the confirmation modal
+            };
+
+            // Actual clear logic after confirmation
+            confirmYesBtn.addEventListener('click', () => {
+                localStorage.removeItem('foodKioskOrders');
+                renderAdminOrders(); // Update admin view to show empty
+                confirmationModal.style.display = 'none'; // Hide modal
+            });
+
+            confirmNoBtn.addEventListener('click', () => {
+                confirmationModal.style.display = 'none'; // Hide modal
+            });
+
+            // Save completed orders to clipboard
+            const saveCompletedOrdersToClipboard = () => {
+                const orders = loadOrders();
+                const completedOrders = orders.filter(order => order.status === 'completed');
+                
+                if (completedOrders.length === 0) {
+                    alert('No completed orders to save.');
+                    return;
+                }
+
+                const dataToCopy = JSON.stringify(completedOrders, null, 2); // Pretty print JSON
+                const tempInput = document.createElement('textarea');
+                tempInput.value = dataToCopy;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                try {
+                    document.execCommand('copy');
+                    saveCompletedOrdersBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+                    setTimeout(() => {
+                        saveCompletedOrdersBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Save Completed Orders To Clipboard';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy completed orders: ', err);
+                    alert('Failed to copy completed orders. Please copy manually: ' + dataToCopy);
+                } finally {
+                    document.body.removeChild(tempInput);
+                }
+            };
+            
+            // --- Event Listeners ---
+            adminLoginSubmitBtn.addEventListener('click', () => {
+                if (adminPinInput.value === ADMIN_PIN) {
+                    adminLoginMessage.classList.add('hidden');
+                    adminLoginSubmitBtn.classList.add('hidden');
+                    adminPinInput.classList.add('hidden'); // Hide input after successful login
+                    adminDashboardContent.classList.remove('hidden');
+                    renderAdminOrders(); // Load and display orders
+                } else {
+                    adminLoginMessage.classList.remove('hidden');
+                }
+            });
+
+            clearOrdersBtn.addEventListener('click', clearAllOrders);
+            saveCompletedOrdersBtn.addEventListener('click', saveCompletedOrdersToClipboard);
+
+            // Initial render on page load if logged in (although we hide it, it's good practice)
+            renderAdminOrders();
+        });
+    </script>
+</body>
+</html>
