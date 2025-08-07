@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin/Chef Dashboard</title>
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for icons -->
@@ -164,19 +164,19 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- New Orders Column -->
                     <div class="admin-column">
-                        <h3>New Orders</h3>
+                        <h3>Pending Payments</h3>
                         <div id="new-orders-list-admin" class="space-y-4 max-h-96 overflow-y-auto pr-2">
                             <p class="text-gray-500 text-center text-sm" id="no-new-orders">No new orders.</p>
                         </div>
                     </div>
-                    <!-- In Progress Column -->
+                    <!-- Orders In Progress -->
                     <div class="admin-column">
                         <h3>In Progress</h3>
                         <div id="in-progress-orders-list-admin" class="space-y-4 max-h-96 overflow-y-auto pr-2">
                             <p class="text-gray-500 text-center text-sm" id="no-in-progress-orders">No orders in progress.</p>
                         </div>
                     </div>
-                    <!-- Completed Orders Column -->
+                    <!-- Completed/Delivered Orders -->
                     <div class="admin-column">
                         <h3>Completed Orders</h3>
                         <div id="completed-orders-list-admin" class="space-y-4 max-h-96 overflow-y-auto pr-2">
